@@ -25,6 +25,9 @@ class Club
     #[ORM\Column(length: 5)]
     private ?string $cp = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licencieClub')]
+    private ?Licencie $clubLicencie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Club
     public function setCp(string $cp): static
     {
         $this->cp = $cp;
+
+        return $this;
+    }
+
+    public function getClubLicencie(): ?Licencie
+    {
+        return $this->clubLicencie;
+    }
+
+    public function setClubLicencie(?Licencie $clubLicencie): static
+    {
+        $this->clubLicencie = $clubLicencie;
 
         return $this;
     }

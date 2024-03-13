@@ -16,6 +16,9 @@ class Qualite
     #[ORM\Column(length: 50)]
     private ?string $libellequalite = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licensieQualite')]
+    private ?Licencie $qualiteLicencie = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +32,18 @@ class Qualite
     public function setLibellequalite(string $libellequalite): static
     {
         $this->libellequalite = $libellequalite;
+
+        return $this;
+    }
+
+    public function getQualiteLicencie(): ?Licencie
+    {
+        return $this->qualiteLicencie;
+    }
+
+    public function setQualiteLicencie(?Licencie $qualiteLicencie): static
+    {
+        $this->qualiteLicencie = $qualiteLicencie;
 
         return $this;
     }

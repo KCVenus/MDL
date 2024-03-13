@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HotelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HotelRepository::class)]
@@ -30,6 +32,14 @@ class Hotel
 
     #[ORM\Column(length: 255)]
     private ?string $mail = null;
+
+    #[ORM\OneToMany(targetEntity: proposer::class, mappedBy: 'proposerHotel')]
+    private Collection $hotelProposer;
+
+    public function __construct()
+    {
+        $this->hotelProposer = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +114,36 @@ class Hotel
     public function setMail(string $mail): static
     {
         $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, proposer>
+     */
+    public function getHotelProposer(): Collection
+    {
+        return $this->hotelProposer;
+    }
+
+    public function addHotelProposer(proposer $hotelProposer): static
+    {
+        if (!$this->hotelProposer->contains($hotelProposer)) {
+            $this->hotelProposer->add($hotelProposer);
+            $hotelProposer->setProposerHotel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHotelProposer(proposer $hotelProposer): static
+    {
+        if ($this->hotelProposer->removeElement($hotelProposer)) {
+            // set the owning side to null (unless already changed)
+            if ($hotelProposer->getProposerHotel() === $this) {
+                $hotelProposer->setProposerHotel(null);
+            }
+        }
 
         return $this;
     }

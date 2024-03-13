@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\LicencieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,6 +45,18 @@ class Licencie
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateadhesion = null;
+
+    #[ORM\OneToMany(targetEntity: qualite::class, mappedBy: 'qualiteLicencie')]
+    private Collection $licensieQualite;
+
+    #[ORM\OneToMany(targetEntity: club::class, mappedBy: 'clubLicencie')]
+    private Collection $licencieClub;
+
+    public function __construct()
+    {
+        $this->licensieQualite = new ArrayCollection();
+        $this->licencieClub = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -165,6 +179,66 @@ class Licencie
     public function setDateadhesion(\DateTimeInterface $dateadhesion): static
     {
         $this->dateadhesion = $dateadhesion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, qualite>
+     */
+    public function getLicensieQualite(): Collection
+    {
+        return $this->licensieQualite;
+    }
+
+    public function addLicensieQualite(qualite $licensieQualite): static
+    {
+        if (!$this->licensieQualite->contains($licensieQualite)) {
+            $this->licensieQualite->add($licensieQualite);
+            $licensieQualite->setQualiteLicencie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicensieQualite(qualite $licensieQualite): static
+    {
+        if ($this->licensieQualite->removeElement($licensieQualite)) {
+            // set the owning side to null (unless already changed)
+            if ($licensieQualite->getQualiteLicencie() === $this) {
+                $licensieQualite->setQualiteLicencie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, club>
+     */
+    public function getLicencieClub(): Collection
+    {
+        return $this->licencieClub;
+    }
+
+    public function addLicencieClub(club $licencieClub): static
+    {
+        if (!$this->licencieClub->contains($licencieClub)) {
+            $this->licencieClub->add($licencieClub);
+            $licencieClub->setClubLicencie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLicencieClub(club $licencieClub): static
+    {
+        if ($this->licencieClub->removeElement($licencieClub)) {
+            // set the owning side to null (unless already changed)
+            if ($licencieClub->getClubLicencie() === $this) {
+                $licencieClub->setClubLicencie(null);
+            }
+        }
 
         return $this;
     }

@@ -19,6 +19,9 @@ class Theme
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[ORM\ManyToOne(inversedBy: 'relation')]
+    private ?Atelier $themeAtelier = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Theme
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getThemeAtelier(): ?Atelier
+    {
+        return $this->themeAtelier;
+    }
+
+    public function setThemeAtelier(?Atelier $themeAtelier): static
+    {
+        $this->themeAtelier = $themeAtelier;
 
         return $this;
     }
