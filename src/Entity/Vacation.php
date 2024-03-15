@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\VacationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VacationRepository::class)]
@@ -15,45 +14,53 @@ class Vacation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToMany(targetEntity: Atelier::class, mappedBy: 'atelierVacation')]
-    private Collection $vacationAtelier;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateheureDebut = null;
 
-    public function __construct()
-    {
-        $this->vacationAtelier = new ArrayCollection();
-    }
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateheureFin = null;
+
+    #[ORM\ManyToOne(inversedBy: 'vacations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Atelier $atelier = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Atelier>
-     */
-    public function getVacationAtelier(): Collection
+    public function getDateheureDebut(): ?\DateTimeInterface
     {
-        return $this->vacationAtelier;
+        return $this->dateheureDebut;
     }
 
-    public function addVacationAtelier(Atelier $vacationAtelier): static
+    public function setDateheureDebut(\DateTimeInterface $dateheureDebut): static
     {
-        if (!$this->vacationAtelier->contains($vacationAtelier)) {
-            $this->vacationAtelier->add($vacationAtelier);
-            $vacationAtelier->setAtelierVacation($this);
-        }
+        $this->dateheureDebut = $dateheureDebut;
 
         return $this;
     }
 
-    public function removeVacationAtelier(Atelier $vacationAtelier): static
+    public function getDateheureFin(): ?\DateTimeInterface
     {
-        if ($this->vacationAtelier->removeElement($vacationAtelier)) {
-            // set the owning side to null (unless already changed)
-            if ($vacationAtelier->getAtelierVacation() === $this) {
-                $vacationAtelier->setAtelierVacation(null);
-            }
-        }
+        return $this->dateheureFin;
+    }
+
+    public function setDateheureFin(\DateTimeInterface $dateheureFin): static
+    {
+        $this->dateheureFin = $dateheureFin;
+
+        return $this;
+    }
+
+    public function getAtelier(): ?Atelier
+    {
+        return $this->atelier;
+    }
+
+    public function setAtelier(?Atelier $atelier): static
+    {
+        $this->atelier = $atelier;
 
         return $this;
     }

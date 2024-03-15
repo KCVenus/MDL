@@ -16,35 +16,19 @@ class Inscription
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $licence_id = null;
-
-    #[ORM\Column]
-    private ?int $loger_id = null;
-
-    #[ORM\Column]
-    private ?int $etat_id = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_inscription = null;
+    private ?\DateTimeInterface $dateinscription = null;
 
-    #[ORM\ManyToOne(inversedBy: 'atelierVacation')]
-    private ?Atelier $atelierInscription = null;
+    #[ORM\OneToMany(targetEntity: Restauration::class, mappedBy: 'inscription')]
+    private Collection $restaurations;
 
-    #[ORM\OneToMany(targetEntity: Nuite::class, mappedBy: 'nuiteInscription')]
-    private Collection $inscriptionNuite;
-
-    #[ORM\OneToMany(targetEntity: Compte::class, mappedBy: 'compteInscription')]
-    private Collection $inscriptionCompte;
-
-    #[ORM\ManyToMany(targetEntity: Restauration::class, inversedBy: 'restaurationInscription')]
-    private Collection $inscriptionRestauration;
+    #[ORM\ManyToMany(targetEntity: Atelier::class, mappedBy: 'inscriptions')]
+    private Collection $ateliers;
 
     public function __construct()
     {
-        $this->inscriptionNuite = new ArrayCollection();
-        $this->inscriptionCompte = new ArrayCollection();
-        $this->inscriptionRestauration = new ArrayCollection();
+        $this->restaurations = new ArrayCollection();
+        $this->ateliers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,122 +36,14 @@ class Inscription
         return $this->id;
     }
 
-    public function getLicenceId(): ?int
+    public function getDateinscription(): ?\DateTimeInterface
     {
-        return $this->licence_id;
+        return $this->dateinscription;
     }
 
-    public function setLicenceId(int $licence_id): static
+    public function setDateinscription(\DateTimeInterface $dateinscription): static
     {
-        $this->licence_id = $licence_id;
-
-        return $this;
-    }
-
-    public function getLogerId(): ?int
-    {
-        return $this->loger_id;
-    }
-
-    public function setLogerId(int $loger_id): static
-    {
-        $this->loger_id = $loger_id;
-
-        return $this;
-    }
-
-    public function getEtatId(): ?int
-    {
-        return $this->etat_id;
-    }
-
-    public function setEtatId(int $etat_id): static
-    {
-        $this->etat_id = $etat_id;
-
-        return $this;
-    }
-
-    public function getDateInscription(): ?\DateTimeInterface
-    {
-        return $this->date_inscription;
-    }
-
-    public function setDateInscription(\DateTimeInterface $date_inscription): static
-    {
-        $this->date_inscription = $date_inscription;
-
-        return $this;
-    }
-
-    public function getAtelierInscription(): ?Atelier
-    {
-        return $this->atelierInscription;
-    }
-
-    public function setAtelierInscription(?Atelier $atelierInscription): static
-    {
-        $this->atelierInscription = $atelierInscription;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Nuite>
-     */
-    public function getInscriptionNuite(): Collection
-    {
-        return $this->inscriptionNuite;
-    }
-
-    public function addInscriptionNuite(Nuite $inscriptionNuite): static
-    {
-        if (!$this->inscriptionNuite->contains($inscriptionNuite)) {
-            $this->inscriptionNuite->add($inscriptionNuite);
-            $inscriptionNuite->setNuiteInscription($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInscriptionNuite(Nuite $inscriptionNuite): static
-    {
-        if ($this->inscriptionNuite->removeElement($inscriptionNuite)) {
-            // set the owning side to null (unless already changed)
-            if ($inscriptionNuite->getNuiteInscription() === $this) {
-                $inscriptionNuite->setNuiteInscription(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Compte>
-     */
-    public function getInscriptionCompte(): Collection
-    {
-        return $this->inscriptionCompte;
-    }
-
-    public function addInscriptionCompte(Compte $inscriptionCompte): static
-    {
-        if (!$this->inscriptionCompte->contains($inscriptionCompte)) {
-            $this->inscriptionCompte->add($inscriptionCompte);
-            $inscriptionCompte->setCompteInscription($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInscriptionCompte(Compte $inscriptionCompte): static
-    {
-        if ($this->inscriptionCompte->removeElement($inscriptionCompte)) {
-            // set the owning side to null (unless already changed)
-            if ($inscriptionCompte->getCompteInscription() === $this) {
-                $inscriptionCompte->setCompteInscription(null);
-            }
-        }
+        $this->dateinscription = $dateinscription;
 
         return $this;
     }
@@ -175,23 +51,56 @@ class Inscription
     /**
      * @return Collection<int, Restauration>
      */
-    public function getInscriptionRestauration(): Collection
+    public function getRestaurations(): Collection
     {
-        return $this->inscriptionRestauration;
+        return $this->restaurations;
     }
 
-    public function addInscriptionRestauration(Restauration $inscriptionRestauration): static
+    public function addRestauration(Restauration $restauration): static
     {
-        if (!$this->inscriptionRestauration->contains($inscriptionRestauration)) {
-            $this->inscriptionRestauration->add($inscriptionRestauration);
+        if (!$this->restaurations->contains($restauration)) {
+            $this->restaurations->add($restauration);
+            $restauration->setInscription($this);
         }
 
         return $this;
     }
 
-    public function removeInscriptionRestauration(Restauration $inscriptionRestauration): static
+    public function removeRestauration(Restauration $restauration): static
     {
-        $this->inscriptionRestauration->removeElement($inscriptionRestauration);
+        if ($this->restaurations->removeElement($restauration)) {
+            // set the owning side to null (unless already changed)
+            if ($restauration->getInscription() === $this) {
+                $restauration->setInscription(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Atelier>
+     */
+    public function getAteliers(): Collection
+    {
+        return $this->ateliers;
+    }
+
+    public function addAtelier(Atelier $atelier): static
+    {
+        if (!$this->ateliers->contains($atelier)) {
+            $this->ateliers->add($atelier);
+            $atelier->addInscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAtelier(Atelier $atelier): static
+    {
+        if ($this->ateliers->removeElement($atelier)) {
+            $atelier->removeInscription($this);
+        }
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
@@ -13,30 +15,20 @@ class Theme
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $atelier_id = null;
-
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'relation')]
-    private ?Atelier $themeAtelier = null;
+    #[ORM\ManyToMany(targetEntity: Atelier::class, mappedBy: 'themes')]
+    private Collection $ateliers;
+
+    public function __construct()
+    {
+        $this->ateliers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAtelierId(): ?int
-    {
-        return $this->atelier_id;
-    }
-
-    public function setAtelierId(int $atelier_id): static
-    {
-        $this->atelier_id = $atelier_id;
-
-        return $this;
     }
 
     public function getLibelle(): ?string
@@ -51,14 +43,29 @@ class Theme
         return $this;
     }
 
-    public function getThemeAtelier(): ?Atelier
+    /**
+     * @return Collection<int, Atelier>
+     */
+    public function getAteliers(): Collection
     {
-        return $this->themeAtelier;
+        return $this->ateliers;
     }
 
-    public function setThemeAtelier(?Atelier $themeAtelier): static
+    public function addAtelier(Atelier $atelier): static
     {
-        $this->themeAtelier = $themeAtelier;
+        if (!$this->ateliers->contains($atelier)) {
+            $this->ateliers->add($atelier);
+            $atelier->addTheme($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAtelier(Atelier $atelier): static
+    {
+        if ($this->ateliers->removeElement($atelier)) {
+            $atelier->removeTheme($this);
+        }
 
         return $this;
     }

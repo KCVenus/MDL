@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProposerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProposerRepository::class)]
@@ -15,60 +13,55 @@ class Proposer
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'hotelProposer')]
-    private ?Hotel $proposerHotel = null;
+    #[ORM\Column]
+    private ?float $tarifNuite = null;
 
-    #[ORM\OneToMany(targetEntity: categorieChambre::class, mappedBy: 'categorieChambreProposer')]
-    private Collection $proposerCategorieChambre;
+    #[ORM\ManyToOne( targetEntity: Hotel::class, inversedBy: 'tarifs')]
+    private ?Hotel $hotel = null;
 
-    public function __construct()
-    {
-        $this->proposerCategorieChambre = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'tarifs')]
+    private ?CategorieChambre $categorie = null;
+    
+    
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProposerHotel(): ?Hotel
+    public function getTarifNuite(): ?float
     {
-        return $this->proposerHotel;
+        return $this->tarifNuite;
     }
 
-    public function setProposerHotel(?Hotel $proposerHotel): static
+    public function setTarifNuite(float $tarifNuite): static
     {
-        $this->proposerHotel = $proposerHotel;
+        $this->tarifNuite = $tarifNuite;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, categorieChambre>
-     */
-    public function getProposerCategorieChambre(): Collection
+    public function getHotel(): ?Hotel
     {
-        return $this->proposerCategorieChambre;
+        return $this->hotel;
     }
 
-    public function addProposerCategorieChambre(categorieChambre $proposerCategorieChambre): static
+    public function setHotel(?Hotel $hotel): static
     {
-        if (!$this->proposerCategorieChambre->contains($proposerCategorieChambre)) {
-            $this->proposerCategorieChambre->add($proposerCategorieChambre);
-            $proposerCategorieChambre->setCategorieChambreProposer($this);
-        }
+        $this->hotel = $hotel;
 
         return $this;
     }
 
-    public function removeProposerCategorieChambre(categorieChambre $proposerCategorieChambre): static
+    public function getCategorie(): ?CategorieChambre
     {
-        if ($this->proposerCategorieChambre->removeElement($proposerCategorieChambre)) {
-            // set the owning side to null (unless already changed)
-            if ($proposerCategorieChambre->getCategorieChambreProposer() === $this) {
-                $proposerCategorieChambre->setCategorieChambreProposer(null);
-            }
-        }
+        return $this->categorie;
+    }
+
+    public function setCategorie(?CategorieChambre $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\RestaurationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,19 +14,14 @@ class Restauration
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date_restauration = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateRestauration = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $libelle = null;
+    #[ORM\Column(length: 100)]
+    private ?string $typeRepas = null;
 
-    #[ORM\ManyToMany(targetEntity: Inscription::class, mappedBy: 'inscriptionRestauration')]
-    private Collection $restaurationInscription;
-
-    public function __construct()
-    {
-        $this->restaurationInscription = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'restaurations')]
+    private ?Inscription $inscription = null;
 
     public function getId(): ?int
     {
@@ -37,51 +30,36 @@ class Restauration
 
     public function getDateRestauration(): ?\DateTimeInterface
     {
-        return $this->date_restauration;
+        return $this->dateRestauration;
     }
 
-    public function setDateRestauration(\DateTimeInterface $date_restauration): static
+    public function setDateRestauration(\DateTimeInterface $dateRestauration): static
     {
-        $this->date_restauration = $date_restauration;
+        $this->dateRestauration = $dateRestauration;
 
         return $this;
     }
 
-    public function getLibelle(): ?string
+    public function getTypeRepas(): ?string
     {
-        return $this->libelle;
+        return $this->typeRepas;
     }
 
-    public function setLibelle(string $libelle): static
+    public function setTypeRepas(string $typeRepas): static
     {
-        $this->libelle = $libelle;
+        $this->typeRepas = $typeRepas;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Inscription>
-     */
-    public function getRestaurationInscription(): Collection
+    public function getInscription(): ?Inscription
     {
-        return $this->restaurationInscription;
+        return $this->inscription;
     }
 
-    public function addRestaurationInscription(Inscription $restaurationInscription): static
+    public function setInscription(?Inscription $inscription): static
     {
-        if (!$this->restaurationInscription->contains($restaurationInscription)) {
-            $this->restaurationInscription->add($restaurationInscription);
-            $restaurationInscription->addInscriptionRestauration($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRestaurationInscription(Inscription $restaurationInscription): static
-    {
-        if ($this->restaurationInscription->removeElement($restaurationInscription)) {
-            $restaurationInscription->removeInscriptionRestauration($this);
-        }
+        $this->inscription = $inscription;
 
         return $this;
     }

@@ -15,45 +15,31 @@ class Atelier
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $vacation_id = null;
-
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
     #[ORM\Column]
-    private ?int $nb_places = null;
+    private ?int $nbPlacesMaxi = null;
 
-    #[ORM\OneToMany(targetEntity: Theme::class, mappedBy: 'themeAtelier')]
+    #[ORM\OneToMany(targetEntity: Vacation::class, mappedBy: 'atelier', orphanRemoval: true)]
+    private Collection $vacations;
+
+    #[ORM\ManyToMany(targetEntity: Theme::class, inversedBy: 'ateliers')]
     private Collection $themes;
 
-    #[ORM\OneToMany(targetEntity: inscription::class, mappedBy: 'atelierInscription')]
+    #[ORM\ManyToMany(targetEntity: Inscription::class, inversedBy: 'ateliers')]
     private Collection $inscriptions;
-
-    #[ORM\ManyToOne(inversedBy: 'vacationAtelier')]
-    private ?vacation $atelierVacation = null;
 
     public function __construct()
     {
-        $this->relation = new ArrayCollection();
-        $this->atelierVacation = new ArrayCollection();
+        $this->vacations = new ArrayCollection();
+        $this->themes = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getVacationId(): ?int
-    {
-        return $this->vacation_id;
-    }
-
-    public function setVacationId(int $vacation_id): static
-    {
-        $this->vacation_id = $vacation_id;
-
-        return $this;
     }
 
     public function getLibelle(): ?string
@@ -68,14 +54,44 @@ class Atelier
         return $this;
     }
 
-    public function getNbPlaces(): ?int
+    public function getNbPlacesMaxi(): ?int
     {
-        return $this->nb_places;
+        return $this->nbPlacesMaxi;
     }
 
-    public function setNbPlaces(int $nb_places): static
+    public function setNbPlacesMaxi(int $nbPlacesMaxi): static
     {
-        $this->nb_places = $nb_places;
+        $this->nbPlacesMaxi = $nbPlacesMaxi;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vacation>
+     */
+    public function getVacations(): Collection
+    {
+        return $this->vacations;
+    }
+
+    public function addVacation(Vacation $vacation): static
+    {
+        if (!$this->vacations->contains($vacation)) {
+            $this->vacations->add($vacation);
+            $vacation->setAtelier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVacation(Vacation $vacation): static
+    {
+        if ($this->vacations->removeElement($vacation)) {
+            // set the owning side to null (unless already changed)
+            if ($vacation->getAtelier() === $this) {
+                $vacation->setAtelier(null);
+            }
+        }
 
         return $this;
     }
@@ -83,66 +99,47 @@ class Atelier
     /**
      * @return Collection<int, Theme>
      */
-    public function getRelation(): Collection
+    public function getThemes(): Collection
     {
-        return $this->relation;
+        return $this->themes;
     }
 
-    public function addRelation(Theme $relation): static
+    public function addTheme(Theme $theme): static
     {
-        if (!$this->relation->contains($relation)) {
-            $this->relation->add($relation);
-            $relation->setThemeAtelier($this);
+        if (!$this->themes->contains($theme)) {
+            $this->themes->add($theme);
         }
 
         return $this;
     }
 
-    public function removeRelation(Theme $relation): static
+    public function removeTheme(Theme $theme): static
     {
-        if ($this->relation->removeElement($relation)) {
-            // set the owning side to null (unless already changed)
-            if ($relation->getThemeAtelier() === $this) {
-                $relation->setThemeAtelier(null);
-            }
-        }
+        $this->themes->removeElement($theme);
 
         return $this;
     }
 
     /**
-     * @return Collection<int, inscription>
+     * @return Collection<int, Inscription>
      */
-    public function getAtelierVacation(): Collection
+    public function getInscriptions(): Collection
     {
-        return $this->atelierVacation;
+        return $this->inscriptions;
     }
 
-    public function addAtelierVacation(inscription $atelierVacation): static
+    public function addInscription(Inscription $inscription): static
     {
-        if (!$this->atelierVacation->contains($atelierVacation)) {
-            $this->atelierVacation->add($atelierVacation);
-            $atelierVacation->setAtelierInscription($this);
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
         }
 
         return $this;
     }
 
-    public function removeAtelierVacation(inscription $atelierVacation): static
+    public function removeInscription(Inscription $inscription): static
     {
-        if ($this->atelierVacation->removeElement($atelierVacation)) {
-            // set the owning side to null (unless already changed)
-            if ($atelierVacation->getAtelierInscription() === $this) {
-                $atelierVacation->setAtelierInscription(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function setAtelierVacation(?vacation $atelierVacation): static
-    {
-        $this->atelierVacation = $atelierVacation;
+        $this->inscriptions->removeElement($inscription);
 
         return $this;
     }

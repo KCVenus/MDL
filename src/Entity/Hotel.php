@@ -15,30 +15,41 @@ class Hotel
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom = null;
+    #[ORM\Column(length: 60)]
+    private ?string $pnom = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $adresse = null;
+    #[ORM\Column(length: 70)]
+    private ?string $adresse1 = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adresse2 = null;
+
+    #[ORM\Column(length: 5)]
     private ?string $cp = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 70)]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 14)]
     private ?string $tel = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 100)]
     private ?string $mail = null;
 
-    #[ORM\OneToMany(targetEntity: proposer::class, mappedBy: 'proposerHotel')]
-    private Collection $hotelProposer;
+    #[ORM\OneToMany(targetEntity: Nuite::class, mappedBy: 'hotel')]
+    private Collection $nuites;
+    
+    
+    
+    #[ORM\OneToMany(targetEntity: Proposer::class, mappedBy: 'hotel')]
+    private Collection $tarifs;
+    
+   
 
     public function __construct()
     {
-        $this->hotelProposer = new ArrayCollection();
+        $this->nuites = new ArrayCollection();
+        $this->tarifs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,26 +57,38 @@ class Hotel
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getPnom(): ?string
     {
-        return $this->nom;
+        return $this->pnom;
     }
 
-    public function setNom(string $nom): static
+    public function setPnom(string $pnom): static
     {
-        $this->nom = $nom;
+        $this->pnom = $pnom;
 
         return $this;
     }
 
-    public function getAdresse(): ?string
+    public function getAdresse1(): ?string
     {
-        return $this->adresse;
+        return $this->adresse1;
     }
 
-    public function setAdresse(string $adresse): static
+    public function setAdresse1(string $adresse1): static
     {
-        $this->adresse = $adresse;
+        $this->adresse1 = $adresse1;
+
+        return $this;
+    }
+
+    public function getAdresse2(): ?string
+    {
+        return $this->adresse2;
+    }
+
+    public function setAdresse2(?string $adresse2): static
+    {
+        $this->adresse2 = $adresse2;
 
         return $this;
     }
@@ -119,29 +142,59 @@ class Hotel
     }
 
     /**
-     * @return Collection<int, proposer>
+     * @return Collection<int, Nuite>
      */
-    public function getHotelProposer(): Collection
+    public function getNuites(): Collection
     {
-        return $this->hotelProposer;
+        return $this->nuites;
     }
 
-    public function addHotelProposer(proposer $hotelProposer): static
+    public function addNuite(Nuite $nuite): static
     {
-        if (!$this->hotelProposer->contains($hotelProposer)) {
-            $this->hotelProposer->add($hotelProposer);
-            $hotelProposer->setProposerHotel($this);
+        if (!$this->nuites->contains($nuite)) {
+            $this->nuites->add($nuite);
+            $nuite->setHotel($this);
         }
 
         return $this;
     }
 
-    public function removeHotelProposer(proposer $hotelProposer): static
+    public function removeNuite(Nuite $nuite): static
     {
-        if ($this->hotelProposer->removeElement($hotelProposer)) {
+        if ($this->nuites->removeElement($nuite)) {
             // set the owning side to null (unless already changed)
-            if ($hotelProposer->getProposerHotel() === $this) {
-                $hotelProposer->setProposerHotel(null);
+            if ($nuite->getHotel() === $this) {
+                $nuite->setHotel(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Proposer>
+     */
+    public function getTarifs(): Collection
+    {
+        return $this->tarifs;
+    }
+
+    public function addTarif(Proposer $tarif): static
+    {
+        if (!$this->tarifs->contains($tarif)) {
+            $this->tarifs->add($tarif);
+            $tarif->setHotel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTarif(Proposer $tarif): static
+    {
+        if ($this->tarifs->removeElement($tarif)) {
+            // set the owning side to null (unless already changed)
+            if ($tarif->getHotel() === $this) {
+                $tarif->setHotel(null);
             }
         }
 

@@ -19,14 +19,17 @@ class Club
     #[ORM\Column(length: 60)]
     private ?string $adresse1 = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column(length: 60, nullable: true)]
     private ?string $adresse2 = null;
 
     #[ORM\Column(length: 5)]
     private ?string $cp = null;
 
-    #[ORM\ManyToOne(inversedBy: 'licencieClub')]
-    private ?Licencie $clubLicencie = null;
+    #[ORM\Column(length: 60)]
+    private ?string $ville = null;
+
+    #[ORM\Column(length: 14)]
+    private ?string $tel = null;
 
     public function getId(): ?int
     {
@@ -62,7 +65,7 @@ class Club
         return $this->adresse2;
     }
 
-    public function setAdresse2(string $adresse2): static
+    public function setAdresse2(?string $adresse2): static
     {
         $this->adresse2 = $adresse2;
 
@@ -81,14 +84,26 @@ class Club
         return $this;
     }
 
-    public function getClubLicencie(): ?Licencie
+    public function getVille(): ?string
     {
-        return $this->clubLicencie;
+        return $this->ville;
     }
 
-    public function setClubLicencie(?Licencie $clubLicencie): static
+    public function setVille(string $ville): static
     {
-        $this->clubLicencie = $clubLicencie;
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getTel(): ?string
+    {
+        return $this->tel;
+    }
+
+    public function setTel(string $tel): static
+    {
+        $this->tel = $tel;
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\NuiteRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NuiteRepository::class)]
@@ -13,37 +14,37 @@ class Nuite
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'inscriptionNuite')]
-    private ?Inscription $nuiteInscription = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateNuite = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?hotel $nuiteHotel = null;
+    #[ORM\ManyToOne(inversedBy: 'nuites')]
+    private ?Hotel $hotel = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getNuiteInscription(): ?Inscription
+    public function getDateNuite(): ?\DateTimeInterface
     {
-        return $this->nuiteInscription;
+        return $this->dateNuite;
     }
 
-    public function setNuiteInscription(?Inscription $nuiteInscription): static
+    public function setDateNuite(\DateTimeInterface $dateNuite): static
     {
-        $this->nuiteInscription = $nuiteInscription;
+        $this->dateNuite = $dateNuite;
 
         return $this;
     }
 
-    public function getNuiteHotel(): ?hotel
+    public function getHotel(): ?Hotel
     {
-        return $this->nuiteHotel;
+        return $this->hotel;
     }
 
-    public function setNuiteHotel(?hotel $nuiteHotel): static
+    public function setHotel(?Hotel $hotel): static
     {
-        $this->nuiteHotel = $nuiteHotel;
+        $this->hotel = $hotel;
 
         return $this;
     }
