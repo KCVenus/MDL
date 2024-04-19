@@ -19,7 +19,7 @@ Insert into proposer (hotel_id, categorie_id ,tarif_nuite)
 Values (1, 1, 95);
 
 Insert into proposer (hotel_id, categorie_id ,tarif_nuite)
-Values (2, 2, 105);
+Values (1, 2, 105);
 
 Insert into proposer (hotel_id, categorie_id ,tarif_nuite)
 Values (2, 1, 70);

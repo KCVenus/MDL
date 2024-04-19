@@ -1,37 +1,63 @@
 {% extends 'base.html.twig' %}
 
 {% block hero %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    </head>
 
-        <div class=''> 
-            <img class='relative w-screen h-screen z-1' src='https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='hero' />
+    <div class="relative ">
+        <img class=' w-screen h-screen z-1' src='https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='hero' />
+ 
+        <div style="position: absolute;top: 20rem; left: 44rem;" class="z-50 flex flex-col items-center justify-center ">
+            <span class="text-white text-6xl block">Maison des ligues</span>
+            <span class="block text-white text-2xl">Fabio Borner & Arthur Demoisson</span>
         </div>
-        <div class='relative top-72 flex items-center justify-center '>
-            <div class='z-10 absolute'><h1 class='text-white text-6xl'>MAISON DES LIGUES</h1> <div class='flex items-center justify-center'><span class='text-white text-center mt-4 text-2xl'>Arthur Demoisson & Fabio Borner</span></div>  </div></div>
-  <p>Testttttttttttt</p>
-  
-     <div class="container-lg bg-warning bg-opacity-10">
-        {% for atelier in ateliers %}
-            {% if loop.index0 % 3 == 0 %}
-                <div class="row">
-                {% endif %}
-                <div class="col-md-4 border border-warning">
-                    <div class="item">
-                        <h5>{{ atelier.libelle }} :</h5>
-                        <p>Nombres de places : {{ atelier.nbplacesmaxi }}</p>
-                        <p>Les thèmes : </p>
-                        <p>
-                            {% foreach theme in themes %}
-                                {% if atelier.id  ==  theme.id %}
+</div>
+
+
+    <div style="padding-top:5rem; padding-bottom:5rem" class="max-w-7xl mx-auto">
+      
+        <div class="grid grid-cols-2 gap-x-10 gap-y-10">
+            {% for atelier in ateliers %}
+                <div class="bg-gray-100 p-6 rounded-lg">
+                    <div class="">
+                        <div class="item">
+                            <h5 class="text-2xl mb-4 ">{{ atelier.libelle }} :</h5>
+                            <p>Nombres de places : {{ atelier.nbplacesmaxi }}</p>
+                            <p>Les thèmes : </p>
+                            <p>
+                                {% for theme in atelier.themes %}
                                     -{{ theme.libelle }}<br>
-                                {% endif %}
-                            {% endfor %}
-                        </p>
+                                {% endfor %}
+                            </p>
+                        </div>
                     </div>
-                </div>
-                {% if loop.index0 % 3 == 2 or loop.last %}
-                </div>
-            {% endif %}
-        {% endfor %}
+                </div>       
+            {% endfor %}            
+        </div>
+          <p class="text-2xl mt-4"> Les hotels :</p>
+            {% for hotel in hotels %}
+              
+                <p> {{ hotel.pnom }}<p>
+                    {% for tarif in hotel.tarifs %}
+                 
+                     <p>{{ tarif.tarifNuite }} </p>
+                     
+                {% endfor %}
+             {% endfor %}
+             
+             <p> Programme </p>
+             {% for vacation in vacations %}
+             <p> Les vacations </p>
+             <p> {{ vacation.dateheureDebut|date('Y/m/d/') }} </p>
+             <p> {{ vacation.dateheureFin|date('Y/m/d/') }} </p>
+            {% endfor %}
+            
+            
     </div>
 {% endblock %}
 

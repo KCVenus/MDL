@@ -39,8 +39,6 @@ class Hotel
     #[ORM\OneToMany(targetEntity: Nuite::class, mappedBy: 'hotel')]
     private Collection $nuites;
     
-    
-    
     #[ORM\OneToMany(targetEntity: Proposer::class, mappedBy: 'hotel')]
     private Collection $tarifs;
     

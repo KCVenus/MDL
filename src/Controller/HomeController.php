@@ -21,11 +21,13 @@ class HomeController extends AbstractController
         $themes = $themeRepo->findAll();
         $vacation = $vacationRepo->findAll();
         $hotels = $hotelRepo->findAll();
+
+
         
         return $this->render('home/home.html.twig', [
             'ateliers' => $ateliers,
             'themes'   => $themes,
-            'vacation' => $vacation,
+            'vacations' => $vacation,
             'hotels'   => $hotels 
         ]);           
     }
