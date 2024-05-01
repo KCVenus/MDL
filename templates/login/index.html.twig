@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block hero %}
+<style>
+    /* Styles existants */
+    .login-container { display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+    .form-wrapper { background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; margin-top: 5vh; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    .btn-primary { background-color: #007bff; border: none; padding: 10px 15px; color: white; text-transform: uppercase; width: 100%; border-radius: 4px; cursor: pointer; }
+    .links { text-align: center; margin-top: 20px; font-size: 0.9em; }
+    .links a { color: #007bff; text-decoration: underline; }
+    .error-message { color: red; }
+</style>
+
+<div class="login-container">
+    <div class="form-wrapper">
+        {% if error %}
+            <div class="error-message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form action="{{ path('app_login') }}" method="post" class="form">
+            <div class="form-group">
+                <label for="username">N° Licence:</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="_password">
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="btn-primary">Connexion</button>
+
+            <div class="links">
+                <a id="rest-password" href="{{ path('app_forgot_password_request') }}">Mot de passe oublié</a> |
+                <a href="{{ path('app_register') }}">Créer mon compte</a>
+            </div>
+        </form> 
+    </div>
+</div>
+{% endblock %}

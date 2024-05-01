@@ -15,7 +15,15 @@ use App\Repository\HotelRepository;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'app_acceuil')]
+    
+    
+    #[Route('/', name:'app_default')]
+    function ReturToHome(){
+        return $this->redirectToRoute('app_homepage');
+    }
+    
+    
+    #[Route('/home', name: 'app_homepage')]
     public function index(AtelierRepository $atelierRepo, ThemeRepository $themeRepo, VacationRepository $vacationRepo, HotelRepository $hotelRepo): Response {
         $ateliers = $atelierRepo->findAll();
         $themes = $themeRepo->findAll();
@@ -31,11 +39,11 @@ class HomeController extends AbstractController
             'hotels'   => $hotels 
         ]);           
     }
-   
-    #[Route('/club/{id}', name: 'app_club_id')]
-    public function getClub($id, ApiService $des): Response
-    {
-        $club = $des->getClub($id);
-        return new Response($club->getNom());     
-    }
+//   
+//    #[Route('/club/{id}', name: 'app_club_id')]
+//    public function getClub($id, ApiService $des): Response
+//    {
+//        $club = $des->getClub($id);
+//        return new Response($club->getNom());     
+//    }
 }

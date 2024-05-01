@@ -1,5 +1,9 @@
 <?php
 namespace App\Service;
+
+use App\Entity\Licencie;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
@@ -14,8 +18,19 @@ class ApiService {
     
      public function __construct(  
      private HttpClientInterface $client,
-     private SerializerInterface $serialize ){}   
+     private SerializerInterface $serializer ){}   
 
+    
+     public function getLicencie($licence):Licencie
+    {
+        $json = $this->client->request('GET', 'http://localhost:2280/maisondesliguesapi/public/index.php/licencie/' . $licence); 
+        $licencie = $this->serializer->deserialize($json->getContent(), Licencie::class, 'json');
+        
+        return $licencie;
+    }  
+    
+    
+    
      public function getLesClubs(): array
      {
          $json = $this->client->request('GET', "http://maisondesliguesapi.fr:8080/licencie/clubs"); 
@@ -31,17 +46,4 @@ class ApiService {
          return $club;
 
      }
-     
-     
-     
-     public function getLicencie($id):Licencie
-    {
-        $json = $this->client->request('GET', 'http://maisondesliguesapi.fr:8080/licencie/'.$id); 
-        $licencie = $this->serializer->deserialize($json->getContent(), Licencie::class, 'json');
-
-        return $licencie;
-    }
-    
-    
-
 }

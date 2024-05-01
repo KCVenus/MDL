@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block hero %}
+<style>
+    .reset-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f4f4f4;
+    }
+    .reset-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+    .reset-form h1 {
+        color: #333;
+        margin-bottom: 1rem;
+    }
+    .reset-form small {
+        display: block;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        color: #666;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        width: 80%;
+        text-align: center;
+    }
+    .form-control {
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+</style>
+
+<div class="reset-container">
+    <div class="reset-form">
+        {% for flash_error in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+        <h1>Reset your password</h1>
+
+        {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email, {
+                'attr': {'class': 'form-control', 'placeholder': 'Email'}
+            }) }}
+            <div>
+                <small>
+                    Enter your email address, and we will send you a
+                    link to reset your password.
+                </small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send password reset email</button>
+        {{ form_end(requestForm) }}
+    </div>
+</div>
+{% endblock %}

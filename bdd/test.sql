@@ -6,6 +6,11 @@ use db_agenda;
 create user 'taskAgendaUser'@'localhost' identified by 'taskuser';
 grant all privileges on db_agenda.* TO 'taskAgendaUser'@'localhost';
 
+create user 'mdl'@'localhost' identified by 'mdl';
+grant all privileges on mdl.* TO 'mdl'@'localhost';
+
+
+
 
 DROP TABLE IF exists TACHES;
 create table TACHES (
