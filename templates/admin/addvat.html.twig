@@ -10,7 +10,7 @@
 ] %}
     {% if app.flashes(modal.type) %}
         <div class="modal fade" id="{{ modal.id }}" tabindex="-1" aria-labelledby="modalLabel{{ modal.id }}" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog" style="transform: translate(-50%, -50%); top: 50%; left: 50%; position: fixed;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="modalLabel{{ modal.id }}">{{ modal.title }}</h5>
@@ -77,3 +77,4 @@
     });
 </script>
 {% endblock %}
+
