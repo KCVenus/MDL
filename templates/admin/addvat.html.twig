@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+        /* Styles de base pour la mise en forme */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+    }
+
+    .modal-header {
+        background-color: #f8f9fa;
+    }
+
+    .modal-footer {
+        padding: 0.5rem;
+    }
+
+    .form-section {
+        display: none;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<!-- Formulaire principal -->
+{{ form_start(form) }}
+    <div class="form-group">
+        {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <!-- Les champs de formulaire conditionnels ici... -->
+{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function hideAllFields() {
+            document.getElementById('atelier-fields').style.display = 'none';
+            document.getElementById('theme-fields').style.display = 'none';
+            document.getElementById('vacation-fields').style.display = 'none';
+        }
+
+        // Mise à jour des champs affichés en fonction de la sélection du type
+        function updateFields() {
+            var selectedType = document.querySelector('input[name="form[type]"]:checked').value;
+            hideAllFields();
+            document.getElementById(selectedType + '-fields').style.display = 'block';
+        }
+
+        Array.from(document.querySelectorAll('input[name="form[type]"]')).forEach(function(radio) {
+            radio.addEventListener('change', updateFields);
+        });
+
+        // Initialiser les champs au chargement
+        hideAllFields();
+        updateFields();
+    });
+</script>
+{% endblock %}
+
+{% block modal_blocks %}
+    {% for flash_type, modal_id in {
+        'danger': 'AtelierNone',
+        'success': 'AtelierSuccess',
+        'errordate': 'AtelierDate',
+        'error': 'AtelierError'
+    } %}
+        {% if app.flashes(flash_type) %}
+            <div class="modal fade" id="{{ modal_id }}" tabindex="-1" aria-labelledby="modalLabel{{ modal_id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel{{ modal_id }}">{{ modal_id }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            {% for message in app.flashes(flash_type) %}
+                                {{ message }}
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function() {
+                    $('#{{ modal_id }}').modal('show');
+                });
+            </script>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

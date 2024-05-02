@@ -8,11 +8,11 @@
   {% endblock %}
   <style>
     .nav-link {
-        color: white !important; /* Assure que le texte est blanc et utilise !important pour surpasser d'autres styles possibles */
+        color: white !important;
     }
     .nav-link:hover {
-        color: #CCCCCC !important; /* Couleur au survol pour une meilleure visibilité et interaction */
-        text-decoration: none; /* Retire le soulignement par défaut au survol */
+        color: #CCCCCC !important;
+        text-decoration: none;
     }
   </style>
 </head>
@@ -45,6 +45,11 @@
         <li>
           <a href="{{ path('app_logout') }}" class="nav-link block py-2 px-3 rounded md:bg-transparent md:p-0">Se déconnecter</a>
         </li>
+        {% if is_granted('ROLE_USER') or is_granted('ROLE_ADMIN') %}
+        <li>
+          <a href="{{ path('app_vat') }}" class="nav-link block py-2 px-3 rounded md:bg-transparent md:p-0">Editer</a>
+        </li>
+        {% endif %}
         {% endif %}
       </ul>
     </div>
