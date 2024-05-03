@@ -9,55 +9,52 @@
         {% endblock %}
     </head>
 
-    <div class="relative ">
-        <img class=' w-screen h-screen z-1' src='https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='hero' />
- 
-        <div style="position: absolute;top: 20rem; left: 44rem;" class="z-50 flex flex-col items-center justify-center ">
+    <div class="relative">
+        <img class='w-screen h-screen z-1' src='https://plus.unsplash.com/premium_photo-1661876708169-5656991eb206?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='hero' />
+        <div style="position: absolute; top: 20rem; left: 44rem;" class="z-50 flex flex-col items-center justify-center">
             <span class="text-white text-6xl block">Maison des ligues</span>
             <span class="block text-white text-2xl">Fabio Borner & Arthur Demoisson</span>
         </div>
-</div>
+    </div>
 
-
-    <div style="padding-top:5rem; padding-bottom:5rem" class="max-w-7xl mx-auto">
-      
+    <div style="padding-top: 5rem; padding-bottom: 5rem" class="max-w-7xl mx-auto">
         <div class="grid grid-cols-2 gap-x-10 gap-y-10">
             {% for atelier in ateliers %}
                 <div class="bg-gray-100 p-6 rounded-lg">
-                    <div class="">
-                        <div class="item">
-                            <h5 class="text-2xl mb-4 ">{{ atelier.libelle }} :</h5>
-                            <p>Nombres de places : {{ atelier.nbplacesmaxi }}</p>
-                            <p>Les thèmes : </p>
-                            <p>
-                                {% for theme in atelier.themes %}
-                                    -{{ theme.libelle }}<br>
-                                {% endfor %}
-                            </p>
-                        </div>
-                    </div>
-                </div>       
-            {% endfor %}            
-        </div>
-          <p class="text-2xl mt-4"> Les hotels :</p>
-            {% for hotel in hotels %}
-              
-                <p> {{ hotel.pnom }}<p>
-                    {% for tarif in hotel.tarifs %}
-                 
-                     <p>{{ tarif.tarifNuite }} </p>
-                     
-                {% endfor %}
-             {% endfor %}
-             
-             <p> Programme </p>
-             {% for vacation in vacations %}
-             <p> Les vacations </p>
-             <p> {{ vacation.dateheureDebut|date('Y/m/d/') }} </p>
-             <p> {{ vacation.dateheureFin|date('Y/m/d/') }} </p>
+                    <h5 class="text-2xl mb-4">{{ atelier.libelle }} :</h5>
+                    <p>Nombres de places : {{ atelier.nbplacesmaxi }}</p>
+                    <p>Les thèmes :</p>
+                    {% for theme in atelier.themes %}
+                        <p>- {{ theme.libelle }}<br></p>
+                    {% endfor %}
+                </div>
             {% endfor %}
-            
-            
+        </div>
+
+        <p class="text-2xl mt-4">Les hotels :</p>
+        {% for hotel in hotels %}
+            <p>{{ hotel.pnom }}</p>
+            {% set displayed_tarifs = [] %}
+            {% for tarif in hotel.tarifs %}
+                {% if tarif.tarifNuite not in displayed_tarifs %}
+                    <p>{{ tarif.tarifNuite }}</p>
+                    {% set displayed_tarifs = displayed_tarifs|merge([tarif.tarifNuite]) %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        <p class="text-2xl mt-4">Programme :</p>
+        <p>Les vacations</p>
+        {% set displayed_dates = [] %}
+        {% for vacation in vacations %}
+            {% set date_debut = vacation.dateheureDebut|date('Y/m/d') %}
+            {% set date_fin = vacation.dateheureFin|date('Y/m/d') %}
+            {% set date_range = date_debut ~ ' to ' ~ date_fin %}
+            {% if date_range not in displayed_dates %}
+                <p>Début: {{ date_debut }}</p>
+                <p>Fin: {{ date_fin }}</p>
+                {% set displayed_dates = displayed_dates|merge([date_range]) %}
+            {% endif %}
+        {% endfor %}
     </div>
 {% endblock %}
-
