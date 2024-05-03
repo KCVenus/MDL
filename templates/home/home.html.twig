@@ -30,31 +30,47 @@
                 </div>
             {% endfor %}
         </div>
-
-        <p class="text-2xl mt-4">Les hotels :</p>
+        <div class="flex grid-cols-2 justify-between w-full mt-20">
+            <div class="bg-gray-100 justify-center flex flex-col items-center  rounded-lg p-8">
+                   <p class="text-2xl font-bold mt-8 mb-4">Les hotels :</p>
         {% for hotel in hotels %}
-            <p>{{ hotel.pnom }}</p>
+            <div class="bg-gray-100 justify-center flex flex-col items-center  rounded-lg p-8">
+            <p class="text-lg font-semibold">{{ hotel.pnom }}</p>
             {% set displayed_tarifs = [] %}
+            <div class="flex items-center space-x-10">
             {% for tarif in hotel.tarifs %}
                 {% if tarif.tarifNuite not in displayed_tarifs %}
-                    <p>{{ tarif.tarifNuite }}</p>
+                    <p>{{ tarif.tarifNuite }} €  </p>
                     {% set displayed_tarifs = displayed_tarifs|merge([tarif.tarifNuite]) %}
+                    
                 {% endif %}
+             
             {% endfor %}
+            </div>
+            </div>
         {% endfor %}
-
-        <p class="text-2xl mt-4">Programme :</p>
-        <p>Les vacations</p>
+        </div>
+        
+        
+        <div class="bg-gray-100 p-8 rounded-lg w-1/4 flex flex-col items-center">
+        <p class="text-2xl font-bold mb-4">Programme :</p>
+        <p class="text-lg mb-4">Les vacations</p>
+        
         {% set displayed_dates = [] %}
         {% for vacation in vacations %}
             {% set date_debut = vacation.dateheureDebut|date('Y/m/d') %}
             {% set date_fin = vacation.dateheureFin|date('Y/m/d') %}
             {% set date_range = date_debut ~ ' to ' ~ date_fin %}
             {% if date_range not in displayed_dates %}
-                <p>Début: {{ date_debut }}</p>
+                <p class="my-2">Début: {{ date_debut }}</p>
                 <p>Fin: {{ date_fin }}</p>
                 {% set displayed_dates = displayed_dates|merge([date_range]) %}
             {% endif %}
         {% endfor %}
     </div>
+    </div>
+        
+        </div>
+
+        
 {% endblock %}

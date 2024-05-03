@@ -9,7 +9,7 @@
     {'id': 'AtelierError', 'title': 'Erreur', 'body': 'Les champs doivent être remplis', 'type': 'error'}
 ] %}
     {% if app.flashes(modal.type) %}
-        <div class="modal fade" id="{{ modal.id }}" tabindex="-1" aria-labelledby="modalLabel{{ modal.id }}" aria-hidden="true">
+        <div class=" bg-blue-700 fade" id="{{ modal.id }}" tabindex="-1" aria-labelledby="modalLabel{{ modal.id }}" aria-hidden="true">
             <div class="modal-dialog" style="transform: translate(-50%, -50%); top: 50%; left: 50%; position: fixed;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -35,30 +35,30 @@
 
 <!-- Formulaire -->
 {{ form_start(form) }}
-    <div class="form-group">
+    <div class="form-group ">
         {{ form_label(form.type) }}
         {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
     </div>
 
     <!-- Sections conditionnelles pour Atelier, Thème et Vacation -->
     <div id="atelier-fields" style="display:none;" class="form-section">
-        {{ form_row(form.atelier.libelle, {'attr': {'class': 'form-control'}}) }}
-        {{ form_row(form.atelier.nbPlacesMaxi, {'attr': {'class': 'form-control'}}) }}
+        {{ form_row(form.atelier.libelle, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
+        {{ form_row(form.atelier.nbPlacesMaxi, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
     </div>
 
     <div id="theme-fields" style="display:none;" class="form-section">
-        {{ form_row(form.theme.atelier, {'attr': {'class': 'form-control'}}) }}
-        {{ form_row(form.theme.libelle, {'attr': {'class': 'form-control'}}) }}
+        {{ form_row(form.theme.atelier, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
+        {{ form_row(form.theme.libelle, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
     </div>
 
     <div id="vacation-fields" style="display:none;" class="form-section">
-        {{ form_row(form.vacation.atelier, {'attr': {'class': 'form-control'}}) }}
-        {{ form_row(form.vacation.dateDebut, {'attr': {'class': 'form-control'}}) }}
-        {{ form_row(form.vacation.dateFin, {'attr': {'class': 'form-control'}}) }}
+        {{ form_row(form.vacation.atelier, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
+        {{ form_row(form.vacation.dateDebut, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
+        {{ form_row(form.vacation.dateFin, {'attr': {'class': 'bg-gray-200 ml-2 border-2 border-gray-300 form-control'}}) }}
     </div>
 
     <div class="form-group">
-        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+        {{ form_widget(form.save, {'attr': {'class': 'bg-green-500 p-4 btn text-white rounded-lg mt-4 btn-primary'}}) }}
     </div>
 {{ form_end(form) }}
 
