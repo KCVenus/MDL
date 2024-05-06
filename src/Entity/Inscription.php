@@ -28,11 +28,16 @@ class Inscription
     #[ORM\OneToOne(mappedBy: 'inscription', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\ManyToMany(targetEntity: Nuite::class, inversedBy: 'inscriptions')]
+    private Collection $nuites;
+//    
     public function __construct()
-    {
-        $this->restaurations = new ArrayCollection();
-        $this->ateliers = new ArrayCollection();
-    }
+{
+    $this->restaurations = new ArrayCollection();
+    $this->ateliers = new ArrayCollection();
+    $this->nuites = new ArrayCollection(); // Ajout de cette ligne pour initialiser la collection de nuites
+}
+
 
     public function getId(): ?int
     {
@@ -126,6 +131,42 @@ class Inscription
         }
 
         $this->user = $user;
+
+        return $this;
+    }
+    
+    /**
+     * @return Collection<int, Nuite>
+     */
+    public function getNuites(): Collection
+    {
+        return $this->nuites;
+    }
+
+    public function addNuite(Nuite $nuite): static
+    {
+        if (!$this->nuites->contains($nuite)) {
+            $this->nuites->add($nuite);
+        }
+
+        return $this;
+    }
+
+    public function removeNuite(Nuite $nuite): static
+    {
+        $this->nuites->removeElement($nuite);
+
+        return $this;
+    }
+
+    public function isIsValidated(): ?bool
+    {
+        return $this->isValidated;
+    }
+
+    public function setIsValidated(?bool $isValidated): static
+    {
+        $this->isValidated = $isValidated;
 
         return $this;
     }

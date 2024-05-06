@@ -21,10 +21,15 @@ class CategorieChambre {
     #[ORM\OneToMany(targetEntity: Proposer::class, mappedBy: 'categorie')]
     private Collection $tarifs;
 
-    
+    #[ORM\OneToMany(targetEntity: Nuite::class, mappedBy: 'categorieChambre')]
+    private Collection $nuites;
+
+//    #[ORM\OneToMany(targetEntity: Nuite::class, mappedBy: 'categorie')]
+//    private Collection $nuites;
 
     public function __construct() {
         $this->tarifs = new ArrayCollection();
+        $this->nuites = new ArrayCollection();
     }
 
     public function getId(): ?int {
@@ -67,4 +72,34 @@ class CategorieChambre {
 
         return $this;
     }
+     /**
+     * @return Collection<int, Nuite>
+     */
+    public function getNuites(): Collection
+    {
+        return $this->nuites;
+    }
+
+    public function addNuite(Nuite $nuite): static
+    {
+        if (!$this->nuites->contains($nuite)) {
+            $this->nuites->add($nuite);
+            $nuite->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNuite(Nuite $nuite): static
+    {
+        if ($this->nuites->removeElement($nuite)) {
+            // set the owning side to null (unless already changed)
+            if ($nuite->getCategorie() === $this) {
+                $nuite->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+    
 }

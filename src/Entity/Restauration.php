@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RestaurationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RestaurationRepository::class)]
 class Restauration
@@ -22,12 +23,19 @@ class Restauration
 
     #[ORM\ManyToOne(inversedBy: 'restaurations')]
     private ?Inscription $inscription = null;
+    
+    public function __construct()
+{
+    $this->restaurations = new ArrayCollection();
+}
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
+    
+    
     public function getDateRestauration(): ?\DateTimeInterface
     {
         return $this->dateRestauration;
@@ -63,4 +71,30 @@ class Restauration
 
         return $this;
     }
+    public function addRestauration(Restauration $restauration): self
+{
+    if (!$this->restaurations->contains($restauration)) {
+        $this->restaurations[] = $restauration;
+        $restauration->setInscription($this);
+    }
+
+    return $this;
+}
+
+public function removeRestauration(Restauration $restauration): self
+{
+    if ($this->restaurations->removeElement($restauration)) {
+        // set the owning side to null (unless already changed)
+        if ($restauration->getInscription() === $this) {
+            $restauration->setInscription(null);
+        }
+    }
+
+    return $this;
+}
+
+public function getRestaurations(): Collection
+{
+    return $this->restaurations;
+}
 }

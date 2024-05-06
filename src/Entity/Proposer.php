@@ -22,9 +22,7 @@ class Proposer
     #[ORM\ManyToOne(inversedBy: 'tarifs')]
     private ?CategorieChambre $categorie = null;
     
-    
-
-
+   
     public function getId(): ?int
     {
         return $this->id;

@@ -30,14 +30,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(name: 'isverified', type: 'boolean')]
-    private $isVerified = false;
+    private bool $isVerified = false;
 
     #[ORM\Column]
     private ?string $numlicence = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Inscription::class, cascade: ['persist', 'remove'], inversedBy: "user")]
     private ?Inscription $inscription = null;
-   
+
+    #[ORM\OneToOne(targetEntity: Licencie::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Licencie $licencie = null;
 
     public function getId(): ?int
     {
@@ -49,83 +51,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
     public function getUsername(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_INSCRIT
-            $roles[] = 'ROLE_INSCRIT';
-
+        $roles[] = 'ROLE_INSCRIT';
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
-     * @see UserInterface
-     */
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // No-op
     }
 
     public function isVerified(): bool
@@ -133,10 +106,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): static
+    public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
-
         return $this;
     }
 
@@ -145,10 +117,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->numlicence;
     }
 
-    public function setNumlicence(string $numlicence): static
+    public function setNumlicence(string $numlicence): self
     {
         $this->numlicence = $numlicence;
-
         return $this;
     }
 
@@ -157,10 +128,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->inscription;
     }
 
-    public function setInscription(?Inscription $inscription): static
+    public function setInscription(?Inscription $inscription): self
     {
         $this->inscription = $inscription;
+        return $this;
+    }
 
+    public function getLicencie(): ?Licencie
+    {
+        return $this->licencie;
+    }
+
+    public function setLicencie(?Licencie $licencie): self
+    {
+        $this->licencie = $licencie;
         return $this;
     }
 }

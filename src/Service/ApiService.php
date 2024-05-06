@@ -2,6 +2,8 @@
 namespace App\Service;
 
 use App\Entity\Licencie;
+use App\Entity\Club;
+use App\Entity\Qualite;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 /*
@@ -31,19 +33,20 @@ class ApiService {
     
     
     
-     public function getLesClubs(): array
-     {
-         $json = $this->client->request('GET', "http://maisondesliguesapi.fr:8080/licencie/clubs"); 
-         $clubs = $this->serializer->deserialize($json->getContent(), Club::class, 'json');
-         return new Response($clubs);
+ public function getClub($id): Club {
+        //$json = $this->client->request('GET', 'http://10.10.2.149/maisondesliguesapi/public/index.php/club/' . $id); //url epreuve
+        $json = $this->client->request('GET', 'http://localhost:2280/maisondesliguesapi/public/index.php/club/' . $id); //url remote
+//        $club = $json->getContent() != null ? $this->serializer->deserialize($json->getContent(), Club::class, 'json') : false;
+        $club = $this->serializer->deserialize($json->getContent(), Club::class, 'json');
 
-     }
-     
-     public function getUnClub($id): Club
-     {
-         $json = $this->client->request('GET', "http://maisondesliguesapi.fr:8080/licencie/club/".$id); 
-         $club = $this->serializer->deserialize($json->getContent(), Club::class, 'json');
-         return $club;
+        return $club;
+    }
 
-     }
+    public function getQualite($id): \App\Entity\Qualite {
+        //$json = $this->client->request('GET', 'http://10.10.2.149/maisondesliguesapi/public/index.php/qualite/' . $id); //url epreuve
+        $json = $this->client->request('GET', 'http://localhost:2280/maisondesliguesapi/public/index.php/qualite/' . $id); //remote
+        $qualite = $json->getContent() != null ? $this->serializer->deserialize($json->getContent(), Qualite::class, 'json') : false;
+
+        return $qualite;
+    }
 }

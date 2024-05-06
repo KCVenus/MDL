@@ -29,15 +29,13 @@ class Licencie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse2 = null;
 
-    #[ORM\Column(length: 5,  options: [
-    "fixed" => true])]
+    #[ORM\Column(length: 5)]
     private ?string $cp = null;
 
     #[ORM\Column(length: 70)]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 14, options: [
-    "fixed" => true], nullable: true)]
+    #[ORM\Column(length: 14, nullable: true)]
     private ?string $tel = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -52,6 +50,9 @@ class Licencie
     #[ORM\Column]
     private ?float $idqualite = null;
 
+    #[ORM\OneToOne(mappedBy: 'licencie', targetEntity: User::class, cascade: ['persist'])]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,10 +63,9 @@ class Licencie
         return $this->numlicence;
     }
 
-    public function setNumlicence(string $numlicence): static
+    public function setNumlicence(string $numlicence): self
     {
         $this->numlicence = $numlicence;
-
         return $this;
     }
 
@@ -74,10 +74,9 @@ class Licencie
         return $this->nom;
     }
 
-    public function setNom(string $nom): static
+    public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -86,10 +85,9 @@ class Licencie
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): static
+    public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -98,10 +96,9 @@ class Licencie
         return $this->adresse1;
     }
 
-    public function setAdresse1(string $adresse1): static
+    public function setAdresse1(string $adresse1): self
     {
         $this->adresse1 = $adresse1;
-
         return $this;
     }
 
@@ -110,10 +107,9 @@ class Licencie
         return $this->adresse2;
     }
 
-    public function setAdresse2(?string $adresse2): static
+    public function setAdresse2(?string $adresse2): self
     {
         $this->adresse2 = $adresse2;
-
         return $this;
     }
 
@@ -122,10 +118,9 @@ class Licencie
         return $this->cp;
     }
 
-    public function setCp(string $cp): static
+    public function setCp(string $cp): self
     {
         $this->cp = $cp;
-
         return $this;
     }
 
@@ -134,10 +129,9 @@ class Licencie
         return $this->ville;
     }
 
-    public function setVille(string $ville): static
+    public function setVille(string $ville): self
     {
         $this->ville = $ville;
-
         return $this;
     }
 
@@ -146,10 +140,9 @@ class Licencie
         return $this->tel;
     }
 
-    public function setTel(?string $tel): static
+    public function setTel(?string $tel): self
     {
         $this->tel = $tel;
-
         return $this;
     }
 
@@ -158,10 +151,9 @@ class Licencie
         return $this->mail;
     }
 
-    public function setMail(?string $mail): static
+    public function setMail(?string $mail): self
     {
         $this->mail = $mail;
-
         return $this;
     }
 
@@ -170,10 +162,9 @@ class Licencie
         return $this->dateadhesion;
     }
 
-    public function setDateadhesion(\DateTimeInterface $dateadhesion): static
+    public function setDateadhesion(\DateTimeInterface $dateadhesion): self
     {
         $this->dateadhesion = $dateadhesion;
-
         return $this;
     }
 
@@ -182,10 +173,9 @@ class Licencie
         return $this->idclub;
     }
 
-    public function setIdclub(float $idclub): static
+    public function setIdclub(float $idclub): self
     {
         $this->idclub = $idclub;
-
         return $this;
     }
 
@@ -194,10 +184,20 @@ class Licencie
         return $this->idqualite;
     }
 
-    public function setIdqualite(float $idqualite): static
+    public function setIdqualite(float $idqualite): self
     {
         $this->idqualite = $idqualite;
+        return $this;
+    }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
         return $this;
     }
 }
